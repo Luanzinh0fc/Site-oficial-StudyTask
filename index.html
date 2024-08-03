@@ -98,6 +98,86 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             transform: scale(0.98);
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .modal-content input[type="text"], .modal-content input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .modal-content button:hover {
+            background-color: #45a049;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .recovery-link {
+            margin-top: 15px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .recovery-message {
+            display: none;
+            color: #f39c12;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -112,9 +192,78 @@
         <h1>Bem-vindo ao StudyTask</h1>
         <p>Aqui você terá acesso a essas matérias, toque para entrar nelas</p>
         <div class="subjects" id="subjects"></div>
-        <a class="button" href="https://sites.google.com/view/studytask-gov/tela-inicial" target="_blank">Estudar Agora</a>
+        <button class="button" id="openModalBtn">Estudar Agora</button>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModalBtn">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="email" name="email" value="Luansilva8521@outlook.com.br" readonly>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+                <button type="submit">Entrar</button>
+                <div class="error-message" id="errorMessage"></div>
+                <div class="recovery-link" id="recoveryLink">Recuperar Senha</div>
+                <div class="recovery-message" id="recoveryMessage">A senha começa com "Aluno"</div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get modal elements
+        var modal = document.getElementById("loginModal");
+        var openModalBtn = document.getElementById("openModalBtn");
+        var closeModalBtn = document.getElementById("closeModalBtn");
+        var loginForm = document.getElementById("loginForm");
+        var errorMessage = document.getElementById("errorMessage");
+        var recoveryLink = document.getElementById("recoveryLink");
+        var recoveryMessage = document.getElementById("recoveryMessage");
+
+        // Correct password
+        var correctPassword = "Aluno2024";
+
+        // Open modal
+        openModalBtn.onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        // Close modal
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+            errorMessage.textContent = "";
+            recoveryMessage.style.display = "none";
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                errorMessage.textContent = "";
+                recoveryMessage.style.display = "none";
+            }
+        }
+
+        // Handle form submission
+        loginForm.onsubmit = function(event) {
+            event.preventDefault();
+            var password = document.getElementById("password").value;
+
+            if (password === correctPassword) {
+                errorMessage.textContent = "";
+                alert("Login bem-sucedido!"); // Adicione a ação após o login bem-sucedido
+                modal.style.display = "none";
+            } else {
+                errorMessage.textContent = "Senha incorreta. Tente novamente.";
+                recoveryMessage.style.display = "none";
+            }
+        }
+
+        // Show recovery message
+        recoveryLink.onclick = function() {
+            recoveryMessage.style.display = "block";
+        }
+    </script>
 </body>
 </html>
